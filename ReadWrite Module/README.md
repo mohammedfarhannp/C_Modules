@@ -16,7 +16,7 @@ Append
 
 get_size function takes one argument, the full path of the file; the function then returns the total number of characters in the file + 1 integer value.
 
-Read function takes two arguments, the full path of the file to read and the buffer variable to store data. Note that the buffer variable must be of char array with size of return value from get_size function declared in the main function; the function returns the buffer variable with contents of the file in it.
+Read function takes two arguments, the full path of the file to read and the buffer variable to store data. Note that the buffer variable must be of char array with size of return value from get_size function declared in the main function; the function updates the buffer array variable with file contents.
 
 Write function takes two arguments, the full path of the file to overwrite and the buffer variable with data; the function over writes the file with contents in buffer variable passed as argument.
 
