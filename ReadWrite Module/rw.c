@@ -19,13 +19,13 @@ int get_size(char File_Name[])
 
 }
 
-char* Read(char File_Name[], char Buffer[])
+void Read(char File_Name[], char Buffer[])
 {
 	FILE* File_Pointer = fopen(File_Name, "r");
 	if (File_Pointer == NULL)
 	{
 		printf("Something went wrong! Couldn't Read File!!\n");
-		return "0";
+		return;
 	}
 
 	char c;
@@ -38,7 +38,6 @@ char* Read(char File_Name[], char Buffer[])
 	}
 	Buffer[i] = '\0';
 	fclose(File_Pointer);
-	return Buffer;
 }
 
 void Write(char File_Name[], char Buffer[])
