@@ -9,10 +9,10 @@ To compile your C program type in command prompt or terminal `gcc -o <output_fil
 ![Compilation](https://github.com/mohammedfarhannp/C_Modules/blob/master/ReadWrite%20Module/imgs/Screenshot_Compilation.png)
 
 This module consists of four functions;
-  get_size
-  Read
-  Write
-  Append
+get_size
+Read
+Write
+Append
 
 get_size function takes one argument, the full path of the file; the function then returns the total number of characters in the file + 1 integer value.
 
