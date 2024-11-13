@@ -21,6 +21,7 @@ long random_num(long LOWER, long UPPER)
 	}
 	else if (LOWER > UPPER) {
 		printf("ERROR:\nLower limit greater than upper limit\n");
+		return 0;
 	}
 	long rand_int = (rand() % (UPPER - LOWER + 1)) + LOWER;
 	return rand_int;
