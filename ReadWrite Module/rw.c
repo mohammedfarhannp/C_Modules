@@ -1,77 +1,106 @@
 #include <stdio.h>
+#include <stddef.h>
 
-int get_size(char File_Name[])
-{
-	FILE* File_Pointer = fopen(File_Name, "r");
-	if (File_Pointer == NULL)
-	{
-		printf("Something went wrong! Couldn't Get File Size!!\n");
-		return 0;
-	}
-	char c;
-	int size = 0;
-	for (c = fgetc(File_Pointer); c != EOF; c = fgetc(File_Pointer))
-	{
-		size++;
-	}
-	fclose(File_Pointer);
-	return size + 1;
+/* Get file size in bytes */
+int get_size(const char File_Name[]) {
+    FILE* fp = fopen(File_Name, "rb");  // binary mode
+    if (!fp) {
+        perror("Error opening file");
+        return -1;
+    }
 
+    fseek(fp, 0, SEEK_END);
+    int size = (int)ftell(fp);
+    fclose(fp);
+
+    return size;
 }
 
-void Read(char File_Name[], char Buffer[])
-{
-	FILE* File_Pointer = fopen(File_Name, "r");
-	if (File_Pointer == NULL)
-	{
-		printf("Something went wrong! Couldn't Read File!!\n");
-		return;
-	}
+/* Read text file into buffer (null-terminated) */
+int Read(const char File_Name[], char Buffer[], size_t max_size) {
+    FILE* fp = fopen(File_Name, "r");
+    if (!fp) {
+        perror("Error opening file");
+        return -1;
+    }
 
-	char c;
-	int i = 0;
+    size_t i = 0;
+    int ch;
+    while (i < max_size - 1 && (ch = fgetc(fp)) != EOF) {
+        Buffer[i++] = (char)ch;
+    }
+    Buffer[i] = '\0';
+    fclose(fp);
 
-	for (c = fgetc(File_Pointer); c != EOF; c = fgetc(File_Pointer))
-	{
-		Buffer[i] = c;
-		i++;
-	}
-	Buffer[i] = '\0';
-	fclose(File_Pointer);
+    return (int)i;
 }
 
-void Write(char File_Name[], char Buffer[])
-{
-	FILE* File_Pointer = fopen(File_Name, "w");
-	if (File_Pointer == NULL)
-	{
-		printf("Something went wrong! Coudn't write to file!!\n");
-		return;
-	}
+/* Write string buffer to text file */
+int Write(const char File_Name[], const char Buffer[]) {
+    FILE* fp = fopen(File_Name, "w");
+    if (!fp) {
+        perror("Error writing to file");
+        return -1;
+    }
 
-	int i = 0;
-	for (char c = Buffer[i]; Buffer[i] != '\0'; c = Buffer[i])
-	{
-		fputc(Buffer[i], File_Pointer);
-		i++;
-	}
-	fclose(File_Pointer);
+    fputs(Buffer, fp);
+    fclose(fp);
+
+    return 0;
 }
 
-void Append(char File_Name[], char Buffer[])
-{
-	FILE* File_Pointer = fopen(File_Name, "a");
-	if (File_Pointer == NULL)
-	{
-		printf("Something went wrong! Coudn't append to file!!\n");
-		return;
-	}
+/* Append string buffer to text file */
+int Append(const char File_Name[], const char Buffer[]) {
+    FILE* fp = fopen(File_Name, "a");
+    if (!fp) {
+        perror("Error appending to file");
+        return -1;
+    }
 
-	int i = 0;
-	for (char c = Buffer[i]; Buffer[i] != '\0'; c = Buffer[i])
-	{
-		fputc(Buffer[i], File_Pointer);
-		i++;
-	}
-	fclose(File_Pointer);
+    fputs(Buffer, fp);
+    fclose(fp);
+
+    return 0;
+}
+
+/* Read binary file into buffer (returns bytes read) */
+int read_bin(const char File_Name[], unsigned char Buffer[], size_t max_size) {
+    FILE* fp = fopen(File_Name, "rb");
+    if (!fp) {
+        perror("Error opening binary file");
+        return -1;
+    }
+
+    size_t bytes_read = fread(Buffer, 1, max_size, fp);
+    fclose(fp);
+
+    return (int)bytes_read;
+}
+
+/* Write binary data to file */
+int write_bin(const char File_Name[], const unsigned char Buffer[], size_t size) {
+    FILE* fp = fopen(File_Name, "wb");
+    if (!fp) {
+        perror("Error writing binary file");
+        return -1;
+    }
+
+    fwrite(Buffer, 1, size, fp);
+    fclose(fp);
+
+    return 0;
+}
+
+/* Append binary data to file */
+int append_bin(const char File_Name[], const unsigned char Buffer[], size_t size) {
+    FILE* fp = fopen(File_Name, "ab");
+    if (!fp) {
+        perror("Error appending binary file");
+        return -1;
+    }
+
+    fwrite(Buffer, 1, size, fp);
+    fclose(fp);
+
+    return 0;
 }
